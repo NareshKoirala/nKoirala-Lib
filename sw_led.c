@@ -21,3 +21,15 @@ void SWL_TOG (SWL_LEDColour led)
     PT1AD1 ^= led;
 }
 
+
+// is a specific switch being pushed (T/F)
+int SWL_Pushed (SWL_SwitchPos pos)
+{
+    if (pos & SWL_ANY)
+        return 1;
+    else 
+        return 0;
+}
+
+// is any switch being pushed (T/F)
+int SWL_Any (void);
