@@ -25,11 +25,45 @@ void SWL_TOG (SWL_LEDColour led)
 // is a specific switch being pushed (T/F)
 int SWL_Pushed (SWL_SwitchPos pos)
 {
-    if (pos & SWL_ANY)
+    if (PT1AD1 & pos)
         return 1;
-    else 
-        return 0;
+    return 0;
 }
 
 // is any switch being pushed (T/F)
-int SWL_Any (void);
+int SWL_Any (void)
+{
+
+}
+
+int SwcountLED ()
+{
+    int count=0;
+    
+    if(SWL_Pushed(SWL_GREEN))
+        count += 1;
+    if(SWL_Pushed(SWL_RED))
+        count += 1;
+    if(SWL_Pushed(SWL_YELLOW))
+        count += 1;
+    return count;
+}
+
+int sw_count()
+{
+    int count=0;
+    
+    if(SWL_Pushed(SWL_UP))
+        count += 1;
+    if(SWL_Pushed(SWL_DOWN))
+        count += 1;
+    if(SWL_Pushed(SWL_RIGHT))
+        count += 1;
+    if(SWL_Pushed(SWL_LEFT))
+        count += 1;
+    if(SWL_Pushed(SWL_CTR))
+        count += 1;
+    return count;
+
+}
+
