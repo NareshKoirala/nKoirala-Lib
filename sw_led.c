@@ -88,10 +88,25 @@ void delay(unsigned int i)
     i = i*2667;
     while(--i);
 }
+
+void delayMore(int i)
+{
+    i = i/20;
+    while(i--)
+    {
+        delay(20);
+    }
+}
+void delaysSec(int i)
+{
+
+}
+
 void DelaySpeed(unsigned long mS)
 {
-    unsigned long iterations= mS*1000/7;
+    unsigned long iterations= 2*(mS*940/7);
 
     for(iterations; 0< iterations;iterations--);
 }
+
 
