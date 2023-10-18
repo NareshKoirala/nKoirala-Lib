@@ -33,7 +33,9 @@ int SWL_Pushed (SWL_SwitchPos pos)
 // is any switch being pushed (T/F)
 int SWL_Any (void)
 {
-
+    if (PT1AD1 & SWL_ANY)
+        return 1;
+    return 0;
 }
 
 int SwcountLED ()
@@ -65,5 +67,31 @@ int sw_count()
         count += 1;
     return count;
 
+}
+
+SwState states(SwState current, SWL_SwitchPos pos)
+{
+    if ((PT1AD1 & pos) && current == Idle)
+        return Pressed;
+
+    if((PT1AD1 & pos) && current == Pressed) 
+        return Held;
+
+    if (!(PT1AD1 & pos) && current == Held)
+        return Released;
+    if (!(PT1AD1 & pos) && current == Released) 
+        return Idle;
+}
+
+void delay(unsigned int i)
+{
+    i = i*2667;
+    while(--i);
+}
+void DelaySpeed(unsigned long mS)
+{
+    unsigned long iterations= mS*1000/7;
+
+    for(iterations; 0< iterations;iterations--);
 }
 

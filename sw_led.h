@@ -81,7 +81,8 @@ int SWL_Pushed (SWL_SwitchPos pos);
 // is any switch being pushed (T/F)
 int SWL_Any (void);
 ///////////////////////////////////////////////////////////////
-
+void delay( unsigned int i);
+void DelaySpeed(unsigned long mS);
 ///////////////////////////////////////////////////////////////
 
   /*
