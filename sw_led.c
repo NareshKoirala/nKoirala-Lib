@@ -97,10 +97,6 @@ void delayMore(int i)
         delay(20);
     }
 }
-void delaysSec(int i)
-{
-
-}
 
 void DelaySpeed(unsigned long mS)
 {
@@ -108,5 +104,3 @@ void DelaySpeed(unsigned long mS)
 
     for(iterations; 0< iterations;iterations--);
 }
-
-
