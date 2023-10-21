@@ -53,3 +53,7 @@ void Clock_Set40MHZ(void); //Set clock to 40MHZ using PLL
 unsigned long Clock_GetBusSpeed(void);
 
 
+
+void clock_set(int synr, int refd);
+
+
