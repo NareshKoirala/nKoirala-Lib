@@ -85,6 +85,7 @@ void delay( unsigned int i);
 void DelaySpeed(unsigned long mS);
 void delayMore(int i);
 int sw_count();
+void delay_irs(unsigned long i, SWL_LEDColour j);
 ///////////////////////////////////////////////////////////////
 
   /*

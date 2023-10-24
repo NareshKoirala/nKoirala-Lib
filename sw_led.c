@@ -98,9 +98,22 @@ void delayMore(int i)
     }
 }
 
+
 void DelaySpeed(unsigned long mS)
 {
     unsigned long iterations= 2*(mS*940/7);
 
     for(iterations; 0< iterations;iterations--);
+}
+
+
+void delay_irs(unsigned long i, SWL_LEDColour j)
+{   
+    unsigned long count;
+    count++;
+    if(count == i)
+    {
+        count = 0;
+        SWL_TOG(j);
+    }
 }

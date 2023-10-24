@@ -56,4 +56,7 @@ unsigned long Clock_GetBusSpeed(void);
 
 void clock_set(int synr, int refd);
 
+void Enable_RTI(void);
+void clear_flag(void);
+
 

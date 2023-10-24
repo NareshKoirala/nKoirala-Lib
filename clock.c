@@ -1,5 +1,6 @@
 #include "derivative.h"
 #include "clock.h"
+#include "sw_led.h"
 
 
 /// @brief Enable output specifying divider for it
@@ -54,3 +55,19 @@ void clock_set(int synr, int refd)
 
     CLKSEL |= CLKSEL_PLLSEL_MASK;
 }
+
+//enable rti
+//make rti to 1ms
+void Enable_RTI(void)
+{
+    RTICTL = 0b10010111;
+    CRGINT |= CRGINT_RTIE_MASK;
+}
+
+void clear_flag(void)
+{
+    CRGFLG = CRGFLG_RTIF_MASK;
+}
+
+
+
