@@ -107,13 +107,13 @@ void DelaySpeed(unsigned long mS)
 }
 
 
-void delay_irs(unsigned long i, SWL_LEDColour j)
+void delay_irs(unsigned long i)
 {   
     unsigned long count;
     count++;
     if(count == i)
     {
         count = 0;
-        SWL_TOG(j);
+        
     }
 }
