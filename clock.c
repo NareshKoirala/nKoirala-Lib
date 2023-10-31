@@ -64,10 +64,6 @@ void Enable_RTI(void)
     CRGINT |= CRGINT_RTIE_MASK;
 }
 
-void clear_flag(void)
-{
-    CRGFLG = CRGFLG_RTIF_MASK;
-}
 
 
 
