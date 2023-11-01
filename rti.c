@@ -3,6 +3,7 @@
 
 
 
+
 //This has to be declared as a global variable in rti.c
 extern volatile unsigned long rtiMasterCount;
 
@@ -26,10 +27,20 @@ void RTI_InitCallback(void(*function)(void));
 
 /// @brief Blocking delay to be used  once the RTI MOdule is enabled
 /// @param timeout 
+void RTI_Delay_ms2(unsigned int ms)
+{
+    unsigned long start = rtiMasterCount;
+
+    while ((rtiMasterCount-start) < ms){};
+}
+
+
+
+
 int RTI_Delay_ms(unsigned int ms)
 {
     if(ms == rtiMasterCount)
-    { 
+    {
         rtiMasterCount = 0;
         return 1;
     }

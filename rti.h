@@ -26,4 +26,4 @@ void RTI_InitCallback(void(*function)(void));
 /// @param timeout 
 int RTI_Delay_ms(unsigned int ms);
 
-void clear_flag(void);
+void clear_flag(void);void RTI_Delay_ms2(unsigned int ms);
