@@ -2,7 +2,8 @@
 #include "rti.h"
 
 
-
+static void nothing(void){};
+static void (*function) (void) = nothing;
 
 //This has to be declared as a global variable in rti.c
 extern volatile unsigned long rtiMasterCount;
@@ -23,7 +24,11 @@ void RTI_Init(void)
 We will implemente this function later once we cover 
 function pointers
 */
-void RTI_InitCallback(void(*function)(void));
+void RTI_InitCallback(void(*funct)(void))
+{
+    RTI_Init();
+    function = funct;
+}
 
 /// @brief Blocking delay to be used  once the RTI MOdule is enabled
 /// @param timeout 
@@ -53,4 +58,9 @@ void clear_flag(void)
     rtiMasterCount++;
 }
 
-
+interrupt VectorNumber_Vrti void Vrti_IRS(void)
+{
+    clear_flag();
+    
+    function();
+}
