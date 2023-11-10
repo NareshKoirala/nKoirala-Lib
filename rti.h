@@ -29,5 +29,5 @@ int RTI_Delay_ms(unsigned int ms);
 void clear_flag(void);void RTI_Delay_ms2(unsigned int ms);
 
 
-static void nothing(void);
-static void () (void);
+//static void nothing(void);
+//static void () (void);
