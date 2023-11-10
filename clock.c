@@ -46,7 +46,7 @@ void Clock_Set40MHZ(void)//Set clock to 40MHZ using PLL
 /// @brief Get current clock speed
 /// @param  void
 /// @return current BUS speed
-unsigned long Clock_GetBusSpeed = 8000000;
+//unsigned long Clock_GetBusSpeed = 8000000;
 
 void clock_set(int synr, int refd)
 {
