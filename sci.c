@@ -1,6 +1,7 @@
 #include "derivative.h"
 #include "sci.h"
 #include "clock.h"
+#include <math.h>
 
 
 
