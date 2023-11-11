@@ -83,9 +83,14 @@ SCI5 - Shared with SPI2 and LCD -      RDX5-> PH6 (PIN 33), TDX5-> PH7 (PIN 32)
 */
 
 //ADVANCED FUNCTIONS  - To Work with any sci*************************************
-int sci_Init(SCI_Base sci, unsigned long ulBaudRate, int iRDRF_Interrupt);
+int sci_Init(SCI_Base sci, unsigned long ulBaudRate, int iRDRF_Interrupt );
 unsigned char sci0_rxByte(unsigned char * pData);
 void sci_txByte (SCI_Base sci, unsigned char data);
 void sci_txStr (SCI_Base sci, char const *straddr);
 unsigned char sci_rxByte(SCI_Base sci, unsigned char * pData);
 /* ADVANCED FUNCTIONS END*******************************************************/
+
+
+
+
+int mathSCI(unsigned long bus, unsigned long buadRate);
