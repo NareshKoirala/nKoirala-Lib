@@ -16,14 +16,14 @@ unsigned long sci0_Init(unsigned long ulBaudRate, int iRDRF_Interrupt )
   else
     SCI0CR2 = SCI0CR2_TE_MASK | SCI0CR2_RE_MASK;
   
-  SCI0BD = mathSCI(20000000 , ulBaudRate);
+  SCI0BD = mathSCI(busspeed , ulBaudRate);
 }
 
 // blocking byte read
 // waits for a byte to arrive and returns it
 unsigned char sci0_bread(void)
 {
-  char data;
+  unsigned char data;
   while(!(SCI0SR1 & SCI0SR1_RDRF_MASK))
   data = SCI0DRL;
   return data;

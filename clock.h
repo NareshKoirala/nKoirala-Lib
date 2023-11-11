@@ -8,6 +8,7 @@
 
 
 #define DEF_BUS_CLOCK 8000000   //default clock speed
+extern volatile unsigned long busspeed;
 
 /*
     The following defines are just to avoid errors in VsCode,

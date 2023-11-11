@@ -2,7 +2,8 @@
 #include "clock.h"
 #include "sw_led.h"
 
-//#define DEF_BUS_CLOCK 8000000
+extern volatile unsigned long busspeed = DEF_BUS_CLOCK;
+
 /// @brief Enable output specifying divider for it
 /// @param  ClockOutDiv
 void Clock_EnableOutput(ClockOutDiv div)
@@ -16,7 +17,7 @@ void Clock_EnableOutput(ClockOutDiv div)
 void Clock_Set8MHZ(void)
 {
     CLKSEL &= ~CLKSEL_PLLSEL_MASK;
-    //Clock_GetBusSpeed = 8000000;
+    busspeed = 8000000;
 }
 
 /// @brief Set clock to 20MHZ using PLL
@@ -24,7 +25,7 @@ void Clock_Set8MHZ(void)
 void Clock_Set20MHZ(void)
 {
     clock_set(4,3);
-    //Clock_GetBusSpeed = 2000000;
+    busspeed = 2000000;
 }
 
 /// @brief Set clock to 24MHZ using PLL
@@ -32,7 +33,7 @@ void Clock_Set20MHZ(void)
 void Clock_Set24MHZ(void)
 {
     clock_set(2,1);
-    //Clock_GetBusSpeed = 2400000;
+    busspeed= 2400000;
 }
 
 /// @brief Set clock to 40MHZ using PLL (optional)
@@ -40,7 +41,7 @@ void Clock_Set24MHZ(void)
 void Clock_Set40MHZ(void)//Set clock to 40MHZ using PLL
 {
     clock_set(4, 1);
-    //Clock_GetBusSpeed = 4000000;
+    busspeed = 4000000;
 }
 
 /// @brief Get current clock speed
