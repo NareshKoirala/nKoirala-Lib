@@ -25,7 +25,7 @@ void Clock_Set8MHZ(void)
 void Clock_Set20MHZ(void)
 {
     clock_set(4,3);
-    busspeed = 2000000;
+    busspeed = 20000000;
 }
 
 /// @brief Set clock to 24MHZ using PLL
@@ -33,7 +33,7 @@ void Clock_Set20MHZ(void)
 void Clock_Set24MHZ(void)
 {
     clock_set(2,1);
-    busspeed= 2400000;
+    busspeed= 24000000;
 }
 
 /// @brief Set clock to 40MHZ using PLL (optional)
@@ -41,7 +41,7 @@ void Clock_Set24MHZ(void)
 void Clock_Set40MHZ(void)//Set clock to 40MHZ using PLL
 {
     clock_set(4, 1);
-    busspeed = 4000000;
+    busspeed = 40000000;
 }
 
 /// @brief Get current clock speed
