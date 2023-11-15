@@ -18,6 +18,8 @@ unsigned long sci0_Init(unsigned long ulBaudRate, int iRDRF_Interrupt )
     SCI0CR2 = SCI0CR2_TE_MASK | SCI0CR2_RE_MASK;
   
   SCI0BD = mathSCI(busspeed , ulBaudRate);
+
+  
 }
 
 // blocking byte read
@@ -26,7 +28,7 @@ unsigned char sci0_bread(void)
 {
   unsigned char data;
   while(!(SCI0SR1 & SCI0SR1_RDRF_MASK))
-  data = SCI0DRL;
+    data = SCI0DRL;
   return data;
 }
 
@@ -62,5 +64,5 @@ void sci0_txStr (char const * straddr)
 
 int mathSCI(unsigned long bus, unsigned long buadRate)
 {
-    return round((bus / (buadRate*16))+0.5);
+    return floorf((bus / (buadRate*16.0))+0.5);
 }
