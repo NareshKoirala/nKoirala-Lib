@@ -1,9 +1,6 @@
 #include "derivative.h"
 #include "sci.h"
 #include "clock.h"
-#include <math.h>
-
-
 
 
 //SCI0 - Normal mode: RDX0-> PS0 (PIN 89), TDX0-> PS1 (PIN 90)
@@ -27,6 +24,7 @@ unsigned long sci0_Init(unsigned long ulBaudRate, int iRDRF_Interrupt )
 unsigned char sci0_bread(void)
 {
   unsigned char data;
+  
   while(!(SCI0SR1 & SCI0SR1_RDRF_MASK))
     data = SCI0DRL;
   return data;
@@ -53,7 +51,8 @@ void sci0_txByte (unsigned char data)
 
 // send a null-terminated string over SCI
 void sci0_txStr (char const * straddr)
-{   int i ;
+{   
+  int i ;
   for (i=0; straddr[i] != 0; i++)
   {
     while(!(SCI0SR1 & SCI0SR1_TDRE_MASK));
