@@ -26,7 +26,7 @@ unsigned char sci0_bread(void)
 {
   unsigned char data;
   
-  while(!(SCI0SR1 & SCI0SR1_RDRF_MASK))___
+  while(!(SCI0SR1 & SCI0SR1_RDRF_MASK));
     data = SCI0DRL;
   return data;
 }
