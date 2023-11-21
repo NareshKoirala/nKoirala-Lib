@@ -29,7 +29,7 @@ typedef enum PIT_InterruptTyepedef_
 /// @param ch The channel in question (PIT_CH0 - PIT_CH3)
 /// @param mt The micro-timer to be connected to (MT1 or MT0(default))
 /// @param ie Enables or disables interrupt for the channel
-void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie);
+void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsigned int ms);
 
 /// @brief Configures the channel to a 1[ms] event, fix connection to micro-timer1 
 /// @param ch The channel to be configured
@@ -48,3 +48,16 @@ void PIT_Start();
 /// @param ch The channel to use with the delay
 /// @param us The number of microseconds to delay
 void PIT_Delay_us(PIT_Channel ch, unsigned int us);
+
+
+
+
+void noblockTimer(unsigned int ms, PIT_Channel ch, PIT_MicroTimer mt);
+void initializingOnems(PIT_Channel ch);
+unsigned long tick(unsigned int ms);
+void timer(unsigned int ms);
+
+extern volatile unsigned long microT;
+extern volatile unsigned long pit;
+extern volatile unsigned long checker;
+extern volatile unsigned long msCounter;

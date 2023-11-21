@@ -1,0 +1,211 @@
+#include "derivative.h"
+#include "pit.h"
+#include "clock.h"
+
+extern volatile unsigned long microT = 0;
+extern volatile unsigned long pit = 0;
+extern volatile unsigned long checker = 0;
+extern volatile unsigned long msCounter = 0;
+
+unsigned long tick(unsigned int ms)
+{
+    return (busspeed * ((double)ms / 1000.00));
+}
+
+void timer(unsigned int ms)
+{
+    int i = 1;
+    unsigned long tickPerSec = tick(ms);
+
+    if (tickPerSec < 65000)
+    {
+        microT = 1;
+        pit = tickPerSec + 1;
+    }
+    else
+    {
+        do
+        {
+            if ((tickPerSec % i) == 0)
+            {
+                if ((tickPerSec / i) <= 65000)
+                {
+                    if ((tickPerSec / i) * i == tickPerSec)
+                    {
+                        checker = 1;
+                        microT = i;
+                        pit = (tickPerSec / i);
+                    }
+                }
+            }
+            i++;
+
+        } while (checker == 0);
+    }
+}
+
+void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsigned int ms)
+{
+    noblockTimer(ms, ch, mt);
+
+    if (mt == PIT_MT1)
+    {
+        PITMUX &= ~ch;
+
+        if (ie)
+        {
+            PITINTE |= ch;
+        }
+        else
+        {
+            PITINTE &= ~ch;
+        }
+
+        PITCE |= ch;
+    }
+    else
+    {
+        PITMUX |= ch;
+
+        if (ie)
+        {
+            PITINTE |= ch;
+        }
+        else
+        {
+            PITINTE &= ~ch;
+        }
+
+        PITCE |= ch;
+    }
+}
+
+void noblockTimer(unsigned int ms, PIT_Channel ch, PIT_MicroTimer mt)
+{
+    timer(ms);
+
+    {
+        unsigned long mic = microT;
+
+        unsigned long pst = pit;
+
+        if (mt == PIT_MT1)
+        {
+            PITMTLD0 = mic - 1;
+        }
+        else
+        {
+            PITMTLD1 = mic - 1;
+        }
+
+        if (ch == PIT_CH0)
+        {
+            PITLD0 = pst - 1;
+        }
+        if (ch == PIT_CH1)
+        {
+            PITLD1 = pst - 1;
+        }
+        if (ch == PIT_CH2)
+        {
+            PITLD2 = pst - 1;
+        }
+        if (ch == PIT_CH3)
+        {
+            PITLD3 = pst - 1;
+        }
+    }
+}
+
+void initializingOnems(PIT_Channel ch)
+{
+    timer(1);
+
+    {
+        unsigned long mic = microT;
+        unsigned long pst = pit;
+
+        PITMUX |= ch;
+
+        PITMTLD1 = mic - 1;
+
+        if (ch == PIT_CH0)
+        {
+            PITLD0 = pst - 1;
+        }
+        if (ch == PIT_CH1)
+        {
+            PITLD1 = pst - 1;
+        }
+        if (ch == PIT_CH2)
+        {
+            PITLD2 = pst - 1;
+        }
+        if (ch == PIT_CH3)
+        {
+            PITLD3 = pst - 1;
+        }
+
+        PITINTE &= ~ch;
+
+        PITCE |= ch;
+    }
+}
+
+void PIT_Set1msDelay(PIT_Channel ch)
+{
+    if (msCounter == 0)
+    {
+        msCounter = 1;
+        initializingOnems(ch);
+    }
+
+    while (!(PITTF & ch));
+
+    PITTF = ch;
+}
+
+void PIT_Start()
+{
+    PITCFLMT |= PITCFLMT_PITE_MASK;
+}
+
+void PIT_Sleep(PIT_Channel ch, unsigned int ms)
+{
+    unsigned int i;
+    for (i = 0; i < ms; i++)
+    {
+        PIT_Set1msDelay(ch);
+    }
+    msCounter = 0;
+}
+
+void PIT_Delay_us(PIT_Channel ch, unsigned int us)
+{
+    int pst = (busspeed/1000000) * us;
+
+    PITMUX |= ch;
+
+    PITMTLD1 = 1 - 1;
+
+    if (ch == PIT_CH0)
+    {
+        PITLD0 = pst;
+    }
+    if (ch == PIT_CH1)
+    {
+        PITLD1 = pst;
+    }
+    if (ch == PIT_CH2)
+    {
+        PITLD2 = pst;
+    }
+    if (ch == PIT_CH3)
+    {
+        PITLD3 = pst;
+    }
+
+    PITINTE &= ~ch;
+
+    PITCE |= ch;
+}
