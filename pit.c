@@ -2,10 +2,10 @@
 #include "pit.h"
 #include "clock.h"
 
-extern volatile unsigned long microT = 0;
-extern volatile unsigned long pit = 0;
-extern volatile unsigned long checker = 0;
-extern volatile unsigned long msCounter = 0;
+unsigned int microT = 0;
+unsigned long pit = 0;
+unsigned long checker = 0;
+unsigned long msCounter = 0;
 
 unsigned long tick(unsigned int ms)
 {
@@ -46,11 +46,12 @@ void timer(unsigned int ms)
 
 void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsigned int ms)
 {
-    noblockTimer(ms, ch, mt);
 
     if (mt == PIT_MT1)
     {
-        PITMUX &= ~ch;
+        PITMUX |= ch;
+
+        noblockTimer(ms, ch, mt);
 
         if (ie)
         {
@@ -65,7 +66,9 @@ void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsign
     }
     else
     {
-        PITMUX |= ch;
+        PITMUX &= ~ch;
+
+        noblockTimer(ms, ch, mt);
 
         if (ie)
         {
@@ -85,17 +88,17 @@ void noblockTimer(unsigned int ms, PIT_Channel ch, PIT_MicroTimer mt)
     timer(ms);
 
     {
-        unsigned long mic = microT;
+        unsigned int mic = microT;
 
         unsigned long pst = pit;
 
         if (mt == PIT_MT1)
         {
-            PITMTLD0 = mic - 1;
+            PITMTLD1 = mic - 1;
         }
         else
         {
-            PITMTLD1 = mic - 1;
+            PITMTLD0 = mic - 1;
         }
 
         if (ch == PIT_CH0)
@@ -161,7 +164,6 @@ void PIT_Set1msDelay(PIT_Channel ch)
     }
 
     while (!(PITTF & ch));
-
     PITTF = ch;
 }
 
@@ -182,7 +184,7 @@ void PIT_Sleep(PIT_Channel ch, unsigned int ms)
 
 void PIT_Delay_us(PIT_Channel ch, unsigned int us)
 {
-    int pst = (busspeed/1000000) * us;
+    unsigned long pst = (busspeed/1000000) * us;
 
     PITMUX |= ch;
 
@@ -190,22 +192,44 @@ void PIT_Delay_us(PIT_Channel ch, unsigned int us)
 
     if (ch == PIT_CH0)
     {
-        PITLD0 = pst;
+        PITLD0 = pst - 1;
     }
     if (ch == PIT_CH1)
     {
-        PITLD1 = pst;
+        PITLD1 = pst - 1;
     }
     if (ch == PIT_CH2)
     {
-        PITLD2 = pst;
+        PITLD2 = pst - 1;
     }
     if (ch == PIT_CH3)
     {
-        PITLD3 = pst;
+        PITLD3 = pst - 1;
     }
 
     PITINTE &= ~ch;
 
     PITCE |= ch;
+
+    forceload(ch);
+    
+    while(!(PITTF & ch)); 
+    PITTF = ch; 
 }
+
+
+void forceload(PIT_Channel ch)
+{
+    PITFLT |= ch;
+    PITTF = ch;
+    
+}
+
+
+/*
+    if(PITTF & PITTF_PTF1_MASK)
+    {
+      PITTF = PITTF_PTF1_MASK;
+      SWL_TOG(SWL_GREEN);
+    }
+*/

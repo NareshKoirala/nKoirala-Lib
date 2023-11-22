@@ -56,8 +56,4 @@ void noblockTimer(unsigned int ms, PIT_Channel ch, PIT_MicroTimer mt);
 void initializingOnems(PIT_Channel ch);
 unsigned long tick(unsigned int ms);
 void timer(unsigned int ms);
-
-extern volatile unsigned long microT;
-extern volatile unsigned long pit;
-extern volatile unsigned long checker;
-extern volatile unsigned long msCounter;
+void forceload(PIT_Channel ch);
