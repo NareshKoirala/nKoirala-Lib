@@ -64,5 +64,10 @@ void sci0_txStr (char const * straddr)
 
 int mathSCI(unsigned long bus, unsigned long buadRate)
 {
-    return floorf((bus / (buadRate*16.0))+0.5);
+  return floorf((bus / (buadRate*16.0))+0.5);
 }
+
+
+/*
+
+*/

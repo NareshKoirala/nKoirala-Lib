@@ -86,6 +86,7 @@ void DelaySpeed(unsigned long mS);
 void delayMore(int i);
 int sw_count();
 void delay_irs(unsigned long i, SWL_LEDColour j);
+SwState states(SwState current, SWL_SwitchPos pos);
 ///////////////////////////////////////////////////////////////
 
   /*

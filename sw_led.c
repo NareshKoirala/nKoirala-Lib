@@ -74,13 +74,13 @@ SwState states(SwState current, SWL_SwitchPos pos)
     if ((PT1AD1 & pos) && current == Idle)
         return Pressed;
 
-    if((PT1AD1 & pos) && current == Pressed) 
+    else if((PT1AD1 & pos) && current == Pressed) 
         return Held;
 
-    if (!(PT1AD1 & pos) && current == Held)
+    else if (!(PT1AD1 & pos) && current == Held)
         return Released;
         
-    if (!(PT1AD1 & pos) && current == Released) 
+    else if (!(PT1AD1 & pos) && current == Released) 
         return Idle;
 }
 

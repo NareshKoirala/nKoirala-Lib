@@ -81,6 +81,8 @@ void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsign
 
         PITCE |= ch;
     }
+    
+    PIT_Start();
 }
 
 void noblockTimer(unsigned int ms, PIT_Channel ch, PIT_MicroTimer mt)
@@ -163,18 +165,22 @@ void PIT_Set1msDelay(PIT_Channel ch)
         initializingOnems(ch);
     }
 
+    PIT_Start();
+
     while (!(PITTF & ch));
     PITTF = ch;
 }
 
 void PIT_Start()
 {
-    PITCFLMT |= PITCFLMT_PITE_MASK;
+    if(!(PITCFLMT & PITCFLMT_PITE_MASK;))
+        PITCFLMT |= PITCFLMT_PITE_MASK;
 }
 
 void PIT_Sleep(PIT_Channel ch, unsigned int ms)
 {
     unsigned int i;
+
     for (i = 0; i < ms; i++)
     {
         PIT_Set1msDelay(ch);
