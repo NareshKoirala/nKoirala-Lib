@@ -44,6 +44,16 @@ void timer(unsigned int ms)
     }
 }
 
+int noBlockDefaultDelay(PIT_Channel ch)
+{
+    if (PITTF & ch)
+    {
+      PITTF = ch;
+      return 1;
+    }
+    return 0;
+}
+
 void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsigned int ms, unsigned int checker)
 {
 
@@ -240,5 +250,11 @@ void forceload(PIT_Channel ch)
     {
       PITTF = PITTF_PTF1_MASK;
       SWL_TOG(SWL_GREEN);
+    }
+
+
+    interrupt VectorNumber_Vpit0 void Vpit0_Handler(void)
+    {
+        PITTF = PITTF_PTF0_MASK; //clear flag;
     }
 */
