@@ -74,6 +74,7 @@ void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsign
             PITMUX &= ~ch;
             noblockTimer(ms, ch, mt);
         }
+        
         if (ie)
         {
             PITINTE |= ch;
