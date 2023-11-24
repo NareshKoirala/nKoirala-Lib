@@ -69,5 +69,23 @@ int mathSCI(unsigned long bus, unsigned long buadRate)
 
 
 /*
+  interrupt VectorNumber_Vsci0 void sci0_ISR(void)
+  {
+    if (sci0_rxByte(&userSend))
+    {
+      if (userSend == '\r')
+      {
+        process = 1;
+      }
 
+      if (rxIndex < BUFFER_SIZE)
+      {
+        rxBuffer[rxIndex++] = userSend;
+      }
+    }
+  }
+
+
+  
+  (void)memset(rxBuffer, 0, rxIndex); reset the array and index
 */

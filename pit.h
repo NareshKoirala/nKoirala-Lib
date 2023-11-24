@@ -52,8 +52,9 @@ void PIT_Delay_us(PIT_Channel ch, unsigned int us);
 
 
 
-void noblockTimer(unsigned int ms, PIT_Channel ch, PIT_MicroTimer mt);
+void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsigned int ms, unsigned int checker);
 void initializingOnems(PIT_Channel ch);
 unsigned long tick(unsigned int ms);
 void timer(unsigned int ms);
 void forceload(PIT_Channel ch);
+void noblockTimer(unsigned int ms, PIT_Channel ch, PIT_MicroTimer mt);

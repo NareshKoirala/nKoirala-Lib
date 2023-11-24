@@ -44,15 +44,17 @@ void timer(unsigned int ms)
     }
 }
 
-void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsigned int ms)
+void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsigned int ms, unsigned int checker)
 {
 
     if (mt == PIT_MT1)
     {
-        PITMUX |= ch;
 
-        noblockTimer(ms, ch, mt);
-
+        if (checker == 1)
+        {
+            PITMUX |= ch;
+            noblockTimer(ms, ch, mt);
+        }
         if (ie)
         {
             PITINTE |= ch;
@@ -66,10 +68,12 @@ void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsign
     }
     else
     {
-        PITMUX &= ~ch;
 
-        noblockTimer(ms, ch, mt);
-
+        if (checker == 1)
+        {
+            PITMUX &= ~ch;
+            noblockTimer(ms, ch, mt);
+        }
         if (ie)
         {
             PITINTE |= ch;
@@ -81,9 +85,8 @@ void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsign
 
         PITCE |= ch;
     }
-    
-    PIT_Start();
 }
+
 
 void noblockTimer(unsigned int ms, PIT_Channel ch, PIT_MicroTimer mt)
 {
@@ -167,13 +170,14 @@ void PIT_Set1msDelay(PIT_Channel ch)
 
     PIT_Start();
 
-    while (!(PITTF & ch));
+    while (!(PITTF & ch))
+        ;
     PITTF = ch;
 }
 
 void PIT_Start()
 {
-    if(!(PITCFLMT & PITCFLMT_PITE_MASK;))
+    if (!(PITCFLMT & PITCFLMT_PITE_MASK))
         PITCFLMT |= PITCFLMT_PITE_MASK;
 }
 
@@ -190,7 +194,7 @@ void PIT_Sleep(PIT_Channel ch, unsigned int ms)
 
 void PIT_Delay_us(PIT_Channel ch, unsigned int us)
 {
-    unsigned long pst = (busspeed/1000000) * us;
+    unsigned long pst = (busspeed / 1000000) * us;
 
     PITMUX |= ch;
 
@@ -218,19 +222,17 @@ void PIT_Delay_us(PIT_Channel ch, unsigned int us)
     PITCE |= ch;
 
     forceload(ch);
-    
-    while(!(PITTF & ch)); 
-    PITTF = ch; 
-}
 
+    while (!(PITTF & ch))
+        ;
+    PITTF = ch;
+}
 
 void forceload(PIT_Channel ch)
 {
     PITFLT |= ch;
     PITTF = ch;
-    
 }
-
 
 /*
     if(PITTF & PITTF_PTF1_MASK)
