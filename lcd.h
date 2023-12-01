@@ -49,7 +49,7 @@ char lcd_GetAddr(void);
 void lcd_Data (unsigned char val);
 void lcd_Addr (unsigned char addr);
 void lcd_AddrXY (unsigned char ix, unsigned char iy);
-void lcd_String (char const * straddr);
+void lcd_String (unsigned char[] , unsigned int );
 void lcdSmartString(char const * straddr, unsigned int delay);
 void lcd_StringXY (unsigned char ix, unsigned char iy, char const * const straddr);
 
