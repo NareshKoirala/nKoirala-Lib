@@ -1,6 +1,7 @@
 #include "derivative.h"
 #include "segs.h"
 #include "clock.h"
+#include "pit.h"
 
 // setup ports to speak with 7-segs
 void Segs_Init (void)
@@ -281,4 +282,47 @@ void owo(Segs_LineOption x)
 
     }
 
+}
+
+unsigned int count = 0;
+void loading(unsigned char addr)
+{  
+    unsigned int segs = SEG_E;
+    
+    PIT_Sleep(PIT_CH3, 100);
+
+
+    if(count > 5)
+    {
+        count = 0;
+    }
+
+    if(count == 0)
+    {
+        segs = SEG_E;
+    }
+    if(count == 1)
+    {
+        segs = SEG_F;
+    }
+    if(count == 2)
+    {
+        segs = SEG_A;
+    }
+    if(count == 3)
+    {
+        segs = SEG_B;
+    }
+    if(count == 4)
+    {
+        segs = SEG_C;
+    }
+    if(count == 5)
+    {
+        segs = SEG_D;
+    }
+
+    Segs_Custom(addr, segs);
+
+    count++;
 }

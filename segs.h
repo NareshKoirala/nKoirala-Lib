@@ -139,3 +139,4 @@ void Segs_SayErr (Segs_LineOption);
 
 void latch(void);
 void owo(Segs_LineOption x);
+void loading(unsigned char addr);
