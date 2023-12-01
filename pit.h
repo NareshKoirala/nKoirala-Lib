@@ -58,3 +58,9 @@ unsigned long tick(unsigned int ms);
 void timer(unsigned int ms);
 void forceload(PIT_Channel ch);
 void noblockTimer(unsigned int ms, PIT_Channel ch, PIT_MicroTimer mt);
+
+
+unsigned int microT;
+unsigned long pit;
+unsigned long checker;
+unsigned long msCounter;
