@@ -25,6 +25,7 @@
 #define E SEG_A | SEG_F | SEG_G | SEG_E | SEG_D
 #define r SEG_E | SEG_G
 #define o SEG_G | SEG_E | SEG_D | SEG_C
+#define u SEG_E | SEG_D | SEG_C
 
 #define SEG_A 0b01000000
 #define SEG_B 0b00100000 
@@ -137,3 +138,4 @@ void Segs_SayErr (Segs_LineOption);
 
 
 void latch(void);
+void owo(Segs_LineOption x);

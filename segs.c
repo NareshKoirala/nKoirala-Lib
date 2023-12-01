@@ -7,6 +7,8 @@ void Segs_Init (void)
 {
     DDRA |= PORTA_PA1_MASK | PORTA_PA0_MASK; 
     DDRB = 0xFF;
+
+    Segs_Clear();
 }
 
 // show HEX decoding (changes all of display to HEX, w/wo dp)
@@ -48,6 +50,8 @@ void Segs_Custom (unsigned char addr, unsigned char data)
     PORTA |= PORTA_PA1_MASK;
     
     latch();
+
+    PORTB = data;
 
     PORTB |= 0x80; 
     
@@ -159,47 +163,51 @@ void Segs_16D (unsigned int num, Segs_LineOption x)
 void Segs_SayErr (Segs_LineOption x)
 {
     int i = 0;
+    unsigned char val = E;
 
     if(!x)
     {
-        while(i++ < 4)
+        while(i < 4)
         {
-            Segs_Custom(i, 0);
-
-            if (i == 0)
-            {    
-                PORTB = E;
-            }
             if (i == 1)
             {    
-                PORTB = r;
+                val = r;
             }
             if (i == 2)
             {    
-                PORTB = r;
+                val = r;
             }
             if (i == 3)
             {
-                PORTB = o;
+                val = o;
             }
+            
+            Segs_Custom(i, val);
+
+            i++;
         }
     }
     else
     {
         i = 4;
-        while(i++ < 8)
+        val = E;
+        while(i < 8)
         {
-            Segs_Custom(i, 0);
-
-            if (i == 4)
-                PORTB = E;
-            else if (i == 5)
-                PORTB = r;
-            else if (i == 6)
-                PORTB = r;
-            else if (i == 7)
-                PORTB = o;
-
+            if (i == 5)
+            {    
+                val = r;
+            }
+            if (i == 6)
+            {    
+                val = r;
+            }
+            if (i == 7)
+            {
+                val = o;
+            }
+            
+            Segs_Custom(i, val);
+            i++;
             
         }
 
@@ -218,4 +226,59 @@ void latch()
     }
 
     PORTA |= PORTA_PA0_MASK;
+}
+
+void owo(Segs_LineOption x)
+{
+    int i = 0;
+    unsigned char val = DEGREE_SIGN;
+
+    if(!x)
+    {
+        while(i < 4)
+        {
+            if (i == 1)
+            {    
+                val = u;
+            }
+            if (i == 2)
+            {    
+                val = u;
+            }
+            if (i == 3)
+            {
+                val = DEGREE_SIGN;
+            }
+            
+            Segs_Custom(i, val);
+
+            i++;
+        }
+    }
+    else
+    {
+        i = 4;
+        val = DEGREE_SIGN;
+        while(i < 8)
+        {
+            if (i == 5)
+            {    
+                val = u;
+            }
+            if (i == 6)
+            {    
+                val = u;
+            }
+            if (i == 7)
+            {
+                val = DEGREE_SIGN;
+            }
+            
+            Segs_Custom(i, val);
+            i++;
+            
+        }
+
+    }
+
 }
