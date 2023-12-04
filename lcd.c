@@ -56,7 +56,7 @@ char lcd_GetAddr(void);
 
 void lcd_Data(unsigned char val)
 {
-  while(lcd_Busy());
+  while (lcd_Busy());
   DDRH = 0xFF;
   PTH = val;
   PORTK_PK1 = 0;
@@ -65,14 +65,13 @@ void lcd_Data(unsigned char val)
 }
 void lcd_Addr(unsigned char addr);
 void lcd_AddrXY(unsigned char ix, unsigned char iy);
-void lcd_String(char const *straddr, unsigned int indexs)
+void lcd_String(char const * straddr)
 {
-  int i = 0;
-  for(i = 0; i < indexs; i++)
+  unsigned int i;
+  for (i = 0; straddr[i] != null; i++)
   {
-    lcd_Data(&straddr[i]);
+    lcd_Data(straddr[i]);
   }
-
 }
 void lcdSmartString(char const *straddr, unsigned int delay);
 void lcd_StringXY(unsigned char ix, unsigned char iy, char const *const straddr);
@@ -80,7 +79,6 @@ void lcd_StringXY(unsigned char ix, unsigned char iy, char const *const straddr)
 void lcd_DispControl(unsigned char curon, unsigned char blinkon);
 void lcd_Clear(void)
 {
-
 }
 void lcd_Home(void);
 void lcd_ShiftL(char);

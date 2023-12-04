@@ -107,7 +107,7 @@ void Segs_Normal (unsigned char, unsigned char, Segs_DPOption);
 
 // control segs manually
 /* Params: (address, data) */
-void Segs_Custom (unsigned char, unsigned char);
+void Segs_Custom (unsigned char, unsigned char, unsigned int);
 
 // clear the display
 /* Params: (address) */

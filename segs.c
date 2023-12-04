@@ -289,7 +289,7 @@ void loading(unsigned char addr)
 {  
     unsigned int segs = SEG_E;
     
-    PIT_Sleep(PIT_CH3, 100);
+    PIT_Sleep(PIT_CH3, 400);
 
 
     if(count > 5)
@@ -326,3 +326,4 @@ void loading(unsigned char addr)
 
     count++;
 }
+
