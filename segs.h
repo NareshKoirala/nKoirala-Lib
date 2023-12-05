@@ -107,7 +107,7 @@ void Segs_Normal (unsigned char, unsigned char, Segs_DPOption);
 
 // control segs manually
 /* Params: (address, data) */
-void Segs_Custom (unsigned char, unsigned char, unsigned int);
+void Segs_Custom (unsigned char, unsigned char);
 
 // clear the display
 /* Params: (address) */
@@ -140,3 +140,4 @@ void Segs_SayErr (Segs_LineOption);
 void latch(void);
 void owo(Segs_LineOption x);
 void loading(unsigned char addr);
+void segsDecimal(unsigned char Addr);
