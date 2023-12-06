@@ -52,7 +52,7 @@ void segsDecimal(unsigned char Addr)
 
     PORTB = PORTB;
 
-    PORTB |= 0x80;
+    PORTB &= ~0x80;
     
     PORTA &= ~PORTA_PA1_MASK;
 
