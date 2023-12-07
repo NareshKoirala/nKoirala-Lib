@@ -40,25 +40,6 @@ void Segs_Normal(unsigned char addr, unsigned char data, Segs_DPOption x)
     latch();
 }
 
-void segsDecimal(unsigned char Addr)
-{
-    PORTB = 0b01011000;
-
-    PORTB |= (Addr & 0x7);
-
-    PORTA |= PORTA_PA1_MASK;
-
-    latch();
-
-    PORTB = PORTB;
-
-    PORTB &= ~0x80;
-    
-    PORTA &= ~PORTA_PA1_MASK;
-
-    latch();
-}
-
 // control segs manually
 /* Params: (address, data) */
 void Segs_Custom(unsigned char addr, unsigned char data)
@@ -71,9 +52,9 @@ void Segs_Custom(unsigned char addr, unsigned char data)
 
     latch();
 
-    PORTB = data;
+    PORTB &= ~0x80;
 
-    PORTB |= 0x80;
+    PORTB = data;
 
     PORTA &= ~PORTA_PA1_MASK;
 
@@ -84,7 +65,7 @@ void Segs_Custom(unsigned char addr, unsigned char data)
 /* Params: (address) */
 void Segs_ClearDigit(unsigned char addr)
 {
-    Segs_Custom(addr, 0);
+    Segs_Custom(addr, NO_DP);
     PORTB = 0x80;
 }
 
@@ -170,10 +151,20 @@ void Segs_16D(unsigned int num, Segs_LineOption x)
 
 // show the 8-bit value starting on the digit as addr (0-6)
 /* Params: (addr, value) */
-// void Segs_8H (unsigned char, unsigned char)
-// {
+void Segs_8H (unsigned char addr, unsigned char value)
+{
+    Segs_Normal(addr, (unsigned char)(value >> 4), Segs_DP_OFF);
 
-// }
+    if(++addr > 7)
+    {
+        Segs_Normal(0, (unsigned char)(value >> 0), Segs_DP_OFF);
+    }
+    else
+    {
+        Segs_Normal(addr, (unsigned char)(value >> 0), Segs_DP_OFF);
+    }
+
+}
 
 // say Err on the appropriate line
 /* Params: (line) */
@@ -237,8 +228,7 @@ void latch()
 
     if (busspeed > 8000000)
     {
-        while (--i)
-            ;
+        while (--i);
     }
 
     PORTA |= PORTA_PA0_MASK;
@@ -301,7 +291,7 @@ void loading(unsigned char addr)
 {
     unsigned int segs = SEG_E;
 
-    PIT_Sleep(PIT_CH3, 400);
+    PIT_Sleep(PIT_CH3, 500);
 
     if (count > 5)
     {
@@ -333,7 +323,63 @@ void loading(unsigned char addr)
         segs = SEG_D;
     }
 
-    Segs_Custom(addr, segs);
+    Segs_Custom(addr, segs | NO_DP);
 
     count++;
+}
+void Segs_16H_DP (unsigned int value, Segs_LineOption line, char dpIndex)
+{
+    unsigned char i, offset;
+    unsigned int cDisplay;
+
+    if(line == Segs_LineTop)
+    {
+        offset = 0;
+    }
+    else if(line == Segs_LineBottom)
+    {
+        offset = 4;
+    }
+
+    for (i = 0; i < 4; i++)
+    {
+        cDisplay = (value >> (unsigned char)((3 - i) * 4)) & 0xF;
+        if(i == dpIndex)
+        {
+          Segs_Normal(offset + i, (unsigned char)cDisplay, Segs_DP_ON); 
+        }
+        else
+        {
+          Segs_Normal(offset + i, (unsigned char)cDisplay, Segs_DP_OFF);
+        }
+ 
+    }  
+}
+void Segs_16D_DP (unsigned int value, Segs_LineOption line, char dpIndex)
+{
+    unsigned char i, offset;
+
+    if(line == Segs_LineTop)
+    {
+        offset = 3;
+    }
+    else if(line == Segs_LineBottom)
+    {
+        offset = 7;
+    }
+
+    for (i = 0; i < 4; i++)
+    {
+        if(i == dpIndex)
+        {
+            Segs_Normal(offset - i, (unsigned char)(value % 10), Segs_DP_ON);
+            value /= 10;
+        }
+        else
+        {
+            Segs_Normal(offset - i, (unsigned char)(value % 10), Segs_DP_OFF);
+            value /= 10;
+        }
+ 
+    }  
 }

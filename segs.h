@@ -141,3 +141,5 @@ void latch(void);
 void owo(Segs_LineOption x);
 void loading(unsigned char addr);
 void segsDecimal(unsigned char Addr);
+void Segs_16H_DP (unsigned int value, Segs_LineOption line, char dpIndex);
+void Segs_16D_DP (unsigned int value, Segs_LineOption line, char dpIndex);
