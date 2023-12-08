@@ -35,8 +35,7 @@ void lcd_Init(void)
 }
 void lcd_Ins(unsigned char val)
 {
-  while (lcd_Busy())
-    ;
+  while (lcd_Busy());
   PORTK_PK1 = 0;
   PORTK_PK2 = 0;
   PTH = val;
@@ -80,7 +79,7 @@ void lcd_Addr(unsigned char addr)
 {
   lcd_Ins(addr | 0x80);
 }
-void lcd_AddrXY(unsigned char ix, unsigned char iy)
+void lcd_AddrXY(unsigned char iy, unsigned char ix)
 {
   if(iy == 0)
   {
@@ -109,13 +108,27 @@ void lcd_String(char const *straddr)
   }
 }
 void lcdSmartString(char const *straddr, unsigned int delay);
-void lcd_StringXY(unsigned char ix, unsigned char iy, char const *const straddr)
+void lcd_StringXY(unsigned char iy, unsigned char ix, char const *const straddr)
 {
-  lcd_AddrXY(ix, iy);
+  lcd_AddrXY(iy, ix);
   lcd_String(straddr);
 }
 
-void lcd_DispControl(unsigned char curon, unsigned char blinkon);
+void lcd_DispControl(unsigned char curon, unsigned char blinkon)
+{
+  unsigned char x = 0b00001111;
+
+  if(!curon)
+  {
+    x = x & 0b11111101;
+  }
+  if(!blinkon)
+  {
+    x = x & 0b11111110;
+  }
+
+  lcd_Ins(x);
+}
 void lcd_Clear(void)
 {
   lcd_Ins(0b00000001);
@@ -124,7 +137,28 @@ void lcd_Home(void)
 {
   lcd_Ins(0b00000010);
 }
-void lcd_ShiftL(char);
-void lcd_ShiftR(char);
+void lcd_ShiftL(char curDis)
+{
+  unsigned char x = 0b00011100;
+
+  if(curDis)
+  {
+    x = x & 0b11110011;
+  }
+
+  lcd_Ins(x);
+}
+void lcd_ShiftR(char curDis)
+{
+  unsigned char x = 0b00011100;
+
+  if(curDis)
+  {
+    x = x & 0b11110111;
+  }
+
+  lcd_Ins(x);
+
+}
 void lcd_CGAddr(unsigned char addr);
 void lcd_CGChar(unsigned char cgAddr, unsigned const char *cgData, int size);
