@@ -205,6 +205,7 @@ void PIT_Sleep(PIT_Channel ch, unsigned int ms)
     {
         PIT_Set1msDelay(ch);
     }
+    msCounter = 0;
 }
 
 void PIT_Delay_us(PIT_Channel ch, unsigned int us)
