@@ -27,6 +27,7 @@
 #define o SEG_G | SEG_E | SEG_D | SEG_C
 #define u SEG_E | SEG_D | SEG_C
 
+
 #define SEG_A 0b01000000
 #define SEG_B 0b00100000 
 #define SEG_C 0b00010000 

@@ -83,6 +83,7 @@ SwState states(SwState current, SWL_SwitchPos pos)
     else if (!(PT1AD1 & pos) && current == Released) 
         return Idle;
 }
+
 SwState Sw_Process(SwState* state, SWL_SwitchPos mask)
 {
     if(PT1AD1 & mask)

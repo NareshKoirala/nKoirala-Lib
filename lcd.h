@@ -51,7 +51,7 @@ void lcd_Addr (unsigned char addr);
 void lcd_AddrXY (unsigned char ix, unsigned char iy);
 void lcd_String (char const * straddr );
 void lcdSmartString(char const * straddr, unsigned int delay);
-void lcd_StringXY (unsigned char ix, unsigned char iy, char const * const straddr);
+void lcd_StringXY (unsigned char iy, unsigned char ix, char const * const straddr);
 
 void lcd_DispControl (unsigned char curon, unsigned char blinkon);
 void lcd_Clear (void);

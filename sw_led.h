@@ -11,7 +11,7 @@
 
 // enum to describe LED indicator positions
 // tag values represent actual bit positions
-typedef enum LEDColourTypedef__ 
+typedef enum LEDColourTypedef__
 {
   SWL_RED     = 0b10000000,
   SWL_YELLOW  = 0b01000000,

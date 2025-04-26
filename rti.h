@@ -22,11 +22,15 @@ function pointers
 */
 void RTI_InitCallback(void(*function)(void));
 
+void RTI_InitCallback_ms(void(*function)(void), int ms);
+
 /// @brief Blocking delay to be used  once the RTI MOdule is enabled
 /// @param timeout 
-int RTI_Delay_ms(unsigned int ms);
+int RTI_NonB_Delay_ms(unsigned int ms);
 
-void clear_flag(void);void RTI_Delay_ms2(unsigned int ms);
+void clear_flag(void);
+
+void RTI_Delay_ms(unsigned int ms);
 
 
 //static void nothing(void);

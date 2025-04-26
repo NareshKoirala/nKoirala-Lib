@@ -2,9 +2,15 @@
 #include "pit.h"
 #include "clock.h"
 
+static void nothing(void) {};
+static void (*function_pit1)(void) = nothing;
+static void (*function_pit0)(void) = nothing;
+static void (*function_pit2)(void) = nothing;
+static void (*function_pit3)(void) = nothing;
+
 unsigned int microT = 0;
 unsigned long pit = 0;
-unsigned long checker = 0;
+unsigned long LiBchecker = 0;
 unsigned long msCounter = 0;
 
 unsigned long tick(unsigned int ms)
@@ -16,6 +22,8 @@ void timer(unsigned int ms)
 {
     int i = 1;
     unsigned long tickPerSec = tick(ms);
+    microT = 0;
+    pit = 0;
 
     if (tickPerSec < 65000)
     {
@@ -26,13 +34,17 @@ void timer(unsigned int ms)
     {
         do
         {
-            if ((tickPerSec % i) == 0)
+            int remainder = (int)(tickPerSec % i);
+
+            if (remainder == 0)
             {
-                if ((tickPerSec / i) <= 65000)
+                long div = (tickPerSec / i);
+
+                if (div <= 65000)
                 {
-                    if ((tickPerSec / i) * i == tickPerSec)
+                    if (div * i == tickPerSec)
                     {
-                        checker = 1;
+                        LiBchecker = 1;
                         microT = i;
                         pit = (tickPerSec / i);
                     }
@@ -40,7 +52,7 @@ void timer(unsigned int ms)
             }
             i++;
 
-        } while (checker == 0);
+        } while (LiBchecker == 0);
     }
 }
 
@@ -48,8 +60,8 @@ int noBlockDefaultDelay(PIT_Channel ch)
 {
     if (PITTF & ch)
     {
-      PITTF = ch;
-      return 1;
+        PITTF = ch;
+        return 1;
     }
     return 0;
 }
@@ -60,11 +72,12 @@ void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsign
     if (mt == PIT_MT1)
     {
 
-        if (checker == 1)
+        if (checker)
         {
             PITMUX |= ch;
             noblockTimer(ms, ch, mt);
         }
+
         if (ie)
         {
             PITINTE |= ch;
@@ -79,12 +92,12 @@ void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsign
     else
     {
 
-        if (checker == 1)
+        if (checker)
         {
             PITMUX &= ~ch;
             noblockTimer(ms, ch, mt);
         }
-        
+
         if (ie)
         {
             PITINTE |= ch;
@@ -96,10 +109,9 @@ void PIT_InitChannel(PIT_Channel ch, PIT_MicroTimer mt, PIT_Interrupt ie, unsign
 
         PITCE |= ch;
     }
-    
+
     PIT_Start();
 }
-
 
 void noblockTimer(unsigned int ms, PIT_Channel ch, PIT_MicroTimer mt)
 {
@@ -123,15 +135,15 @@ void noblockTimer(unsigned int ms, PIT_Channel ch, PIT_MicroTimer mt)
         {
             PITLD0 = pst - 1;
         }
-        if (ch == PIT_CH1)
+        else if (ch == PIT_CH1)
         {
             PITLD1 = pst - 1;
         }
-        if (ch == PIT_CH2)
+        else if (ch == PIT_CH2)
         {
             PITLD2 = pst - 1;
         }
-        if (ch == PIT_CH3)
+        else if (ch == PIT_CH3)
         {
             PITLD3 = pst - 1;
         }
@@ -183,7 +195,8 @@ void PIT_Set1msDelay(PIT_Channel ch)
 
     PIT_Start();
 
-    while (!(PITTF & ch));
+    while (!(PITTF & ch))
+        ;
     PITTF = ch;
 }
 
@@ -198,10 +211,10 @@ void PIT_Sleep(PIT_Channel ch, unsigned int ms)
     unsigned int i;
 
     PIT_Start();
-    
+
     forceload(ch);
 
-    for (i = 0; i < ms; i++) 
+    for (i = 0; i < ms; i++)
     {
         PIT_Set1msDelay(ch);
     }
@@ -210,7 +223,7 @@ void PIT_Sleep(PIT_Channel ch, unsigned int ms)
 
 void PIT_Delay_us(PIT_Channel ch, unsigned int us)
 {
-    unsigned long pst = (busspeed / 1000000) * us;
+    unsigned int pst = (busspeed / 1000000) * us;
 
     PITMUX |= ch;
 
@@ -220,15 +233,15 @@ void PIT_Delay_us(PIT_Channel ch, unsigned int us)
     {
         PITLD0 = pst - 1;
     }
-    if (ch == PIT_CH1)
+    else if (ch == PIT_CH1)
     {
         PITLD1 = pst - 1;
     }
-    if (ch == PIT_CH2)
+    else if (ch == PIT_CH2)
     {
         PITLD2 = pst - 1;
     }
-    if (ch == PIT_CH3)
+    else if (ch == PIT_CH3)
     {
         PITLD3 = pst - 1;
     }
@@ -250,13 +263,60 @@ void forceload(PIT_Channel ch)
     PITTF = ch;
 }
 
+void Pit0_Callback(void (*function)(void))
+{
+    function_pit0 = function;
+}
+void Pit1_Callback(void (*function)(void))
+{
+    function_pit1 = function;
+}
+void Pit2_Callback(void (*function)(void))
+{
+    function_pit2 = function;
+}
+void Pit3_Callback(void (*function)(void))
+{
+    function_pit3 = function;
+}
+
+interrupt VectorNumber_Vpit0 void Vpit0_Handler(void)
+{
+    PITTF = PITTF_PTF0_MASK; // clear flag;
+    function_pit0();
+}
+interrupt VectorNumber_Vpit1 void Vpit1_Handler(void)
+{
+    PITTF = PITTF_PTF1_MASK; // clear flag;
+    function_pit1();
+}
+interrupt VectorNumber_Vpit2 void Vpit2_Handler(void)
+{
+    PITTF = PITTF_PTF2_MASK; // clear flag;
+    function_pit2();
+}
+interrupt VectorNumber_Vpit3 void Vpit3_Handler(void)
+{
+    PITTF = PITTF_PTF3_MASK; // clear flag;
+    function_pit3();
+}
+
 /*
+    PITTF_PTF0_MASK - ch0
+    PITTF_PTF1_MASK - ch1
+    PITTF_PTF2_MASK - ch2
+    PITTF_PTF3_MASK - ch3
+
     if(PITTF & PITTF_PTF1_MASK)
     {
       PITTF = PITTF_PTF1_MASK;
       SWL_TOG(SWL_GREEN);
     }
 
+    VectorNumber_Vpit0 - ch0
+    VectorNumber_Vpit1 - ch1
+    VectorNumber_Vpit2 - ch2
+    VectorNumber_Vpit3 - ch3
 
     interrupt VectorNumber_Vpit0 void Vpit0_Handler(void)
     {
