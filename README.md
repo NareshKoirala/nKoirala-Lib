@@ -2,7 +2,7 @@
 
 ## Firmware Library
 
-![MCU- Nait_MicroBoard](MCU- Nait_MicroBoard.png "MCU- Nait_MicroBoard")
+![MCU Nait MicroBoard](MCU-%20Nait_MicroBoard.png)
 
 **Student Libraries** - Naresh Prasad Koirala
 
